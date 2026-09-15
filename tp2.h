@@ -286,40 +286,102 @@ List<T> &List<T>::operator=(const List<T> &other) {
 template<typename T>
 List<T>::~List() {
     // TODO: liberar todos los nodos que queden con delete.
+    for(Node *actual = head; actual != nullptr; ){
+        Node *siguiente = actual->next;
+        delte actual;
+        actual = siguiente;
+    }
 }
 
 template<typename T>
 bool List<T>::is_empty() const {
     // TODO: devolver si la lista está vacía.
-    return true;
+    if(size == 0){
+        return true;
+    }
+    return false;
 }
 
 template<typename T>
 size_t List<T>::length() const {
     // TODO: devolver la cantidad de elementos.
-    return 0;
+    return size;
 }
 
 template<typename T>
 void List<T>::insert_head(const T& value) {
     // TODO: reservar un nodo con new, enlazarlo al principio y
     // actualizar head/tail/size.
+    Nodo *nuevo = new Node(value);
+    if(is_empty()){
+        nuevo->next = nullptr;
+        nuevo->prev = nullptr;
+        head = nuevo;
+        tail = nuevo;
+    }
+    else{
+        nuevo->next = head;
+        nuevo->prev = nullptr;
+        head->prev = nuevo;
+        head = nuevo;
+    }
+    size++;
 }
 
 template<typename T>
 void List<T>::insert_tail(const T& value) {
     // TODO: reservar un nodo con new, enlazarlo al final y
     // actualizar head/tail/size.
+    Nodo *nuevo = new Node(value);
+    if(is_empty()){
+        nuevo->next = nullptr;
+        nuevo->prev = nullptr;
+        head = nuevo;
+        tail = nuevo;
+    }
+    else{
+        nuevo->next = nullptr;
+        nuevo->prev = tail;
+        tail->next = nuevo;
+        tail = nuevo;
+    }
+    size++;
 }
 
 template<typename T>
 T List<T>::pop_head() {
     // TODO: sacar el primer nodo (con delete), devolver su valor.
+    Node *nuevo_primero = head;
+    T valor = head->value;
+    if(head == tail){
+        head = nullptr;
+        tail = nullptr;
+    }
+    else{
+        head = head->next;
+        head->prev = nullptr;
+    }
+    delete nuevo_primero;
+    size--;
+    return valor;
 }
 
 template<typename T>
 T List<T>::pop_tail() {
     // TODO: sacar el último nodo (con delete), devolver su valor.
+    Node *nuevo_ultimo = tail;
+    T valor = tail->value;
+    if(head == tail){
+        head = nullptr;
+        tail = nullptr;
+    }
+    else{
+        tail = tail->prev;
+        tail->next = nullptr;
+    }
+    delete nuevo_ultimo;
+    size--;
+    return valor;
 }
 
 template<typename T>
