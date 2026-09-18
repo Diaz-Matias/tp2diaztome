@@ -419,49 +419,109 @@ List<T>::ListIter::ListIter(List *list, List::Node *start) {
 template <typename T>
 bool List<T>::ListIter::forward() {
     // TODO: avanzar una posición si se puede.
-    return false;
+    if(this->curr== nullptr or this->curr->next ==nullptr){return false;}
+    else {
+    this->curr = this->curr->next;
+    return true;
+    }
+    
 }
 
 template <typename T>
 bool List<T>::ListIter::backward() {
     // TODO: retroceder una posición si se puede.
-    return false;
+    if(this->curr== nullptr || this->curr->prev ==nullptr){return false;}
+    else {
+    this->curr = this->curr->prev;
+    return true;
+    }
 }
 
 template <typename T>
 const T&  List<T>::ListIter::peek_current() const {
     // TODO: devolver el valor actual
+    return this->curr->value;
 }
 
 template <typename T>
 bool List<T>::ListIter::at_last() const {
     // TODO: devolver si el iterador está en el último elemento.
-    return false;
+    if (this->curr==this->list->tail) {
+        return true;
+    }
+    else{return false;}
 }
 
 template <typename T>
 bool List<T>::ListIter::at_first() const {
     // TODO: devolver si el iterador está en el primer elemento.
-    return false;
+    if (this->curr==this->list->head) {
+        return true;
+    }
+    else{return false;}
 }
 
 template <typename T>
 bool List<T>::ListIter::insert_after(const T&value) {
     // TODO: insertar un valor detrás del actual con new.
-    return false;
+    if (this->curr==this->list->tail) {
+        this->list->insert_tail(value);
+        if (this->curr == nullptr) {
+            this->curr = this->list->head;
+        }
+    }
+    else {
+        Node *nuevo = new Node(value);
+        nuevo->prev=this->curr;
+        nuevo->next=this->curr->next;
+        this->curr->next->prev=nuevo;
+        this->curr->next=nuevo;
+        this->list->size++;
+    }
+    return true;
 }
 
 template <typename T>
 bool List<T>::ListIter::insert_before(const T&value) {
     // TODO: insertar un valor delante del actual con new.
-    return false;
+    if (this->curr==this->list->head) {
+        this->list->insert_head(value);
+        if (this->curr == nullptr) {
+            this->curr = this->list->head;
+        }
+    }
+    else {
+        Node *nuevo = new Node(value);
+        nuevo->next=this->curr;
+        nuevo->prev=this->curr->prev;
+        this->curr->prev->next=nuevo;
+        this->curr->prev=nuevo;
+        this->list->size++;
+    }
+    return true;
 }
 
 template <typename T>
 T List<T>::ListIter::remove() {
     // TODO: sacar el nodo actual (con delete), reposicionar el iterador
     // y devolver el valor que tenía.
+
+    if (this->curr==this->list->head) {
+        this->curr=this->curr->next;
+        return this->list->pop_head();
+    }
+    if (this->curr==this->list->tail) {
+        this->curr=this->curr->prev;
+        return this->list->pop_tail();
+    }
+    this->curr->next->prev=this->curr->prev;
+    this->curr->prev->next=this->curr->next;
+    Node *temp =this->curr;
+    this->curr= this->curr->next;
+    T valor =temp->value;
+    delete temp;
+    this->list->size--;
+    return valor;
 }
 
 #endif // TP2_H
-
