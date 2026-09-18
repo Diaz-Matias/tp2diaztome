@@ -275,12 +275,33 @@ List<T>::List() {
 template<typename T>
 List<T>::List(const List<T> &other) {
     // TODO: crear la nueva lista, como una copia independiente de other
-}
+    head = nullptr;
+    tail = nullptr
+    size = 0;
+    Node *nuevo_nodo = other.head;
+    while(nuevo_nodo != nullptr){
+        insert_tail(nuevo_nodo);
+        nuevo_nodo = nuevo_nodo->next;
+    }
+}   
 
 template<typename T>
 List<T> &List<T>::operator=(const List<T> &other) {
     // TODO: reemplazar la lista actual con una copia independiente de other
     // La memoria anterior no debe perderse, sino liberarse correctamente
+    if(this == &other){return *this}
+    for(Node *este = head; este != nullptr; ){
+        Node *al_lado = este->next;
+        delete este;
+        este = al_lado;
+    }
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+    for(Node *copia = other.head; nodo != nullptr; ){
+        insert_tail(copia->value);
+    }
+    return *this
 }
 
 template<typename T>
@@ -288,7 +309,7 @@ List<T>::~List() {
     // TODO: liberar todos los nodos que queden con delete.
     for(Node *actual = head; actual != nullptr; ){
         Node *siguiente = actual->next;
-        delte actual;
+        delete actual;
         actual = siguiente;
     }
 }
@@ -387,21 +408,25 @@ T List<T>::pop_tail() {
 template<typename T>
 const T& List<T>::peek_head() const {
     // TODO: devolver el valor del principio.
+    return head->value;
 }
 
 template<typename T>
 const T& List<T>::peek_tail() const {
     // TODO: devolver el valor del final.
+    return tail->value;
 }
 
 template <typename T>
 typename List<T>::ListIter List<T>::create_head() {
     // TODO: retornar un iterador parado en el principio de la lista.
+    return ListIter(this, head);
 }
 
 template <typename T>
 typename List<T>::ListIter List<T>::create_tail() {
     // TODO: retornar un iterador parado en el final de la lista.
+    return ListIter(this, tail);
 }
 
 /* ---------------------------------------------------------------
