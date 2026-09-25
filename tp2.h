@@ -276,11 +276,11 @@ template<typename T>
 List<T>::List(const List<T> &other) {
     // TODO: crear la nueva lista, como una copia independiente de other
     head = nullptr;
-    tail = nullptr
+    tail = nullptr;
     size = 0;
     Node *nuevo_nodo = other.head;
     while(nuevo_nodo != nullptr){
-        insert_tail(nuevo_nodo);
+        insert_tail(nuevo_nodo->value);
         nuevo_nodo = nuevo_nodo->next;
     }
 }   
@@ -289,7 +289,7 @@ template<typename T>
 List<T> &List<T>::operator=(const List<T> &other) {
     // TODO: reemplazar la lista actual con una copia independiente de other
     // La memoria anterior no debe perderse, sino liberarse correctamente
-    if(this == &other){return *this}
+    if(this == &other){return *this;}
     for(Node *este = head; este != nullptr; ){
         Node *al_lado = este->next;
         delete este;
@@ -298,10 +298,10 @@ List<T> &List<T>::operator=(const List<T> &other) {
     head = nullptr;
     tail = nullptr;
     size = 0;
-    for(Node *copia = other.head; nodo != nullptr; ){
+    for(Node *copia = other.head; copia != nullptr; copia = copia->next){
         insert_tail(copia->value);
     }
-    return *this
+    return *this;
 }
 
 template<typename T>
@@ -333,7 +333,7 @@ template<typename T>
 void List<T>::insert_head(const T& value) {
     // TODO: reservar un nodo con new, enlazarlo al principio y
     // actualizar head/tail/size.
-    Nodo *nuevo = new Node(value);
+    Node *nuevo = new Node(value);
     if(is_empty()){
         nuevo->next = nullptr;
         nuevo->prev = nullptr;
@@ -353,7 +353,7 @@ template<typename T>
 void List<T>::insert_tail(const T& value) {
     // TODO: reservar un nodo con new, enlazarlo al final y
     // actualizar head/tail/size.
-    Nodo *nuevo = new Node(value);
+    Node *nuevo = new Node(value);
     if(is_empty()){
         nuevo->next = nullptr;
         nuevo->prev = nullptr;
